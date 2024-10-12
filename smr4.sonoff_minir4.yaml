@@ -1,0 +1,38 @@
+# https://sonoff.tech/product/diy-smart-switches/minir4/
+
+esphome:
+  platformio_options:
+    board_build.flash_mode: dio
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+output:
+  - platform: gpio
+    id: output_onboard_led
+    pin:
+      number: 8
+      inverted: true
+
+  - platform: gpio
+    id: output_relay
+    pin:
+      number: 10
+
+binary_sensor:
+
+  # Кнопка на плате
+  - platform: gpio
+    name: "Onboard button"
+    id: binary_sensor_onboard_button
+    pin:
+      number: 0
+
+  # Внешний выключатель
+  - platform: gpio
+    name: "External switch"
+    id: binary_sensor_external_switch
+    pin:
+      number: 1
