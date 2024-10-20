@@ -1,25 +1,25 @@
 # https://sonoff.tech/product/diy-smart-switches/minir4/
 
-esphome:
-  platformio_options:
-    board_build.flash_mode: dio
-
 esp32:
-  board: esp32-c3-devkitm-1
+  # На самом деле там ESP32-D0WD-V3, но esphome не знает про такую плату и выдаёт ошибку
+  # Обсуждение - https://github.com/esphome/feature-requests/issues/2024
+  # На devices.esphome.io указана плата esp32dev
+  # https://devices.esphome.io/devices/Sonoff-MiniR4-Extreme
+  board: esp32dev
   framework:
-    type: esp-idf
+    type: arduino
 
 output:
   - platform: gpio
     id: output_onboard_led
     pin:
-      number: 8
+      number: 19
       inverted: true
 
   - platform: gpio
     id: output_relay
     pin:
-      number: 10
+      number: 26
 
 binary_sensor:
 
@@ -29,10 +29,12 @@ binary_sensor:
     id: binary_sensor_onboard_button
     pin:
       number: 0
+      inverted: true
 
   # Внешний выключатель
   - platform: gpio
     name: "External switch"
     id: binary_sensor_external_switch
     pin:
-      number: 1
+      number: 27
+      inverted: true
