@@ -1,0 +1,86 @@
+# Sonoff DUALR3
+# https://sonoff.tech/product/diy-smart-switches/dualr3/
+
+substitutions:
+  debounce_delay: 30ms
+
+esp32:
+  # На самом деле там ESP32-D0WD-V3, но esphome не знает про такую плату и выдаёт ошибку
+  # Обсуждение - https://github.com/esphome/feature-requests/issues/2024
+  # На devices.esphome.io указана плата esp32dev
+  # https://devices.esphome.io/devices/Sonoff-Dual-R3
+  board: esp32dev
+  framework:
+    type: arduino
+
+status_led:
+  pin:
+    number: 13
+    inverted: true
+
+output:
+  # К реле прибит светодиод
+  - platform: gpio
+    id: output_relay_1
+    pin:
+      number: 27
+
+  # К реле прибит светодиод
+  - platform: gpio
+    id: output_relay_2
+    pin:
+      number: 14
+
+binary_sensor:
+
+  # Кнопка на плате
+  - platform: gpio
+    name: "Onboard button"
+    id: binary_sensor_onboard_button
+    pin:
+      number: 0
+      inverted: true
+    filters:
+      - delayed_on: ${debounce_delay}
+
+  # Внешний выключатель
+  - platform: gpio
+    name: "External switch 1"
+    id: binary_sensor_external_switch_1
+    pin:
+      number: 32
+      inverted: true
+    filters:
+      - delayed_on: ${debounce_delay}
+
+  # Внешний выключатель
+  - platform: gpio
+    name: "External switch 2"
+    id: binary_sensor_external_switch_2
+    pin:
+      number: 33
+      inverted: true
+    filters:
+      - delayed_on: ${debounce_delay}
+
+uart:
+  tx_pin: 25
+  rx_pin: 26
+  baud_rate: 38400
+  parity: EVEN
+  stop_bits: 1
+
+sensor:
+  - platform: cse7761
+    voltage:
+      name: 'Voltage'
+    current_1:
+      name: 'Current 1'
+    current_2:
+      name: 'Current 2'
+    active_power_1:
+      name: 'Power 1'
+      icon: 'mdi:speedometer'
+    active_power_2:
+      name: 'Power 2'
+      icon: 'mdi:speedometer'
