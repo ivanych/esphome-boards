@@ -1,4 +1,8 @@
+# Sonoff MINIR4
 # https://sonoff.tech/product/diy-smart-switches/minir4/
+
+substitutions:
+  debounce_delay: 30ms
 
 esp32:
   # На самом деле там ESP32-D0WD-V3, но esphome не знает про такую плату и выдаёт ошибку
@@ -30,6 +34,8 @@ binary_sensor:
     pin:
       number: 0
       inverted: true
+    filters:
+      - delayed_on: ${debounce_delay}
 
   # Внешний выключатель
   - platform: gpio
@@ -38,3 +44,5 @@ binary_sensor:
     pin:
       number: 27
       inverted: true
+    filters:
+      - delayed_on: ${debounce_delay}
