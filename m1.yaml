@@ -1,0 +1,18 @@
+# ESP32-C3 Super Mini
+# https://www.nologo.tech/product/esp32/esp32C3SuperMini.html
+
+esphome:
+  platformio_options:
+    board_build.flash_mode: dio
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+output:
+  - platform: gpio
+    id: output_onboard_led
+    pin:
+      number: 8
+      inverted: true
