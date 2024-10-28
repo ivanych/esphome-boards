@@ -1,0 +1,13 @@
+# ESP32-S NodeMCU-32S
+# https://docs.ai-thinker.com/en/esp32/boards/nodemcu_32s
+
+esp32:
+  board: nodemcu-32s
+  framework:
+    type: arduino
+
+output:
+  - platform: gpio
+    id: output_onboard_led
+    pin:
+      number: 2

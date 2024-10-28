@@ -1,3 +1,4 @@
+# Luatos ESP32-C3 Core
 # https://wiki.luatos.org/chips/esp32c3/board.html
 
 esphome:
@@ -11,10 +12,9 @@ esp32:
 
 output:
   - platform: gpio
+    id: output_onboard_led
     pin:
       number: 12
-      inverted: false
-    id: output_onboard_led
 
 status_led:
   pin: 13
