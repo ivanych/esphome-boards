@@ -1,4 +1,4 @@
-# Luatos ESP32-C3 Core
+# ESP32-C3 Luatos CORE-ESP32
 # https://wiki.luatos.org/chips/esp32c3/board.html
 
 esphome:
@@ -6,7 +6,7 @@ esphome:
     board_build.flash_mode: dio
 
 esp32:
-  board: airm2m_core_esp32c3
+  board: esp32-c3-devkitm-1
   framework:
     type: esp-idf
 
@@ -15,6 +15,11 @@ output:
     id: output_onboard_led
     pin:
       number: 12
+      # https://github.com/esphome/issues/issues/3744
+      ignore_pin_validation_error: true
 
 status_led:
-  pin: 13
+  pin:
+    number: 13
+    # https://github.com/esphome/issues/issues/3744
+    ignore_pin_validation_error: true
