@@ -1,6 +1,9 @@
 # ESP32-C3 Luatos CORE-ESP32
 # https://wiki.luatos.org/chips/esp32c3/board.html
 
+substitutions:
+  board_name: "c1"
+
 esphome:
   platformio_options:
     board_build.flash_mode: dio

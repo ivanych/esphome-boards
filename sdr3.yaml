@@ -2,6 +2,7 @@
 # https://sonoff.tech/product/diy-smart-switches/dualr3/
 
 substitutions:
+  board_name: "sdr3"
   debounce_delay: 30ms
 
 esp32:
