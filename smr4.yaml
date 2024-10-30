@@ -2,6 +2,7 @@
 # https://sonoff.tech/product/diy-smart-switches/minir4/
 
 substitutions:
+  board_name: "smr4"
   debounce_delay: 30ms
 
 esp32:

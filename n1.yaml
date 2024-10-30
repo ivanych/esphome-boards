@@ -1,6 +1,9 @@
 # ESP32-S NodeMCU-32S
 # https://docs.ai-thinker.com/en/esp32/boards/nodemcu_32s
 
+substitutions:
+  board_name: "n1"
+
 esp32:
   board: nodemcu-32s
   framework:
