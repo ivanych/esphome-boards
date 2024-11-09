@@ -1,0 +1,54 @@
+# Ivanych Light 1
+#
+
+substitutions:
+  board_name: "il1"
+  initial_debounce_delay: "5"
+
+esphome:
+  platformio_options:
+    board_build.flash_mode: dio
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+output:
+  - platform: gpio
+    id: output_onboard_led
+    pin:
+      number: 8
+      inverted: true
+
+number:
+
+  # Время задержки для устранения дребезга модуля фотодиода
+  - platform: template
+    name: "Debounce delay"
+    id: number_debounce_delay
+    icon: mdi:pulse
+    unit_of_measurement: "ms"
+    mode: box
+    min_value: 1
+    max_value: 100
+    step: 1
+    optimistic: true
+    restore_value: true
+
+    # Это значение будет установлено, если не было прочитано сохранённое значение (restore_value)
+    initial_value: ${initial_debounce_delay}
+
+binary_sensor:
+
+  # Фотодиод
+  - platform: gpio
+    name: "Photodiode"
+    id: binary_sensor_photodiode
+    pin:
+      number: 5
+      inverted: true
+    filters:
+
+      # При возврате значения из лямбды суффикс 'ms' не нужен, только число миллисекунд
+      - delayed_on: !lambda "return id(number_debounce_delay).state;"
