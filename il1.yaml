@@ -44,7 +44,7 @@ binary_sensor:
   # Фотодиод
   - platform: gpio
     name: "Photodiode"
-    id: binary_sensor_photodiode
+    id: binary_sensor_switch
     pin:
       number: 5
       inverted: true
