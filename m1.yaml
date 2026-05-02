@@ -1,9 +1,11 @@
-# ESP32-C3 Super Mini
-# https://duino.ru/esp32-c3/
+# ESP32 C3 Super Mini
+# https://www.espboards.dev/esp32/esp32-c3-super-mini/
 #
-# Управляемые объекты (интерфейс BUTTON1):
+# Управляемые объекты (интерфейс B1):
 #   - Кнопка на плате      (binary_sensor_onboard_button)
 #   - Светодиод на плате   (output_onboard_led)
+# Неуправляемые объекты:
+#   - нет
 # + разные пины
 
 substitutions:
@@ -19,14 +21,6 @@ esp32:
   framework:
     type: esp-idf
 
-output:
-  # Светодиод на плате
-  - platform: gpio
-    id: output_onboard_led
-    pin:
-      number: 8
-      inverted: true
-
 binary_sensor:
   # Кнопка на плате
   - platform: gpio
@@ -37,3 +31,11 @@ binary_sensor:
       inverted: true
     filters:
       - delayed_on: ${debounce_delay}
+
+output:
+  # Светодиод на плате
+  - platform: gpio
+    id: output_onboard_led
+    pin:
+      number: 8
+      inverted: true

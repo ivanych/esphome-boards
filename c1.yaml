@@ -1,8 +1,16 @@
 # ESP32-C3 Luatos CORE-ESP32
 # https://wiki.luatos.org/chips/esp32c3/board.html
+#
+# Управляемые объекты (интерфейс B1):
+#   - Кнопка на плате      (binary_sensor_onboard_button)
+#   - Светодиод на плате   (output_onboard_led)
+# Неуправляемые объекты:
+#   - Статусный светодиод
+# + разные пины
 
 substitutions:
   board_name: "c1"
+  debounce_delay: 30ms
 
 esphome:
   platformio_options:
@@ -13,7 +21,20 @@ esp32:
   framework:
     type: esp-idf
 
+binary_sensor:
+  # Кнопка на плате
+  - platform: gpio
+    name: "Onboard button"
+    id: binary_sensor_onboard_button
+    pin:
+      number: 9
+      inverted: true
+      ignore_strapping_warning: true
+    filters:
+      - delayed_on: ${debounce_delay}
+
 output:
+  # Светодиод на плате
   - platform: gpio
     id: output_onboard_led
     pin:
@@ -21,6 +42,7 @@ output:
       # https://github.com/esphome/issues/issues/3744
       ignore_pin_validation_error: true
 
+# Статусный светодиод
 status_led:
   pin:
     number: 13
