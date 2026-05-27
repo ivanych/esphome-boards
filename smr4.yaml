@@ -11,6 +11,7 @@
 
 substitutions:
   board_name: "smr4"
+  friendly_board_name: "SMR4"
   debounce_delay: 30ms
 
 esp32:
