@@ -10,6 +10,7 @@
 
 substitutions:
   board_name: "n1"
+  friendly_board_name: "N1"
   debounce_delay: 30ms
 
 esp32:

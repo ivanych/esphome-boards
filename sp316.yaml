@@ -11,6 +11,7 @@
 
 substitutions:
   board_name: "sp316"
+  friendly_board_name: "SP316"
   debounce_delay: 30ms
 
 esp32:

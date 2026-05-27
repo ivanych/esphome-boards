@@ -3,6 +3,7 @@
 
 substitutions:
   board_name: "sdr3"
+  friendly_board_name: "SDR3"
   debounce_delay: 30ms
 
 esp32:

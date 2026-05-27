@@ -10,6 +10,7 @@
 
 substitutions:
   board_name: "c1"
+  friendly_board_name: "C1"
   debounce_delay: 30ms
 
 esphome:
