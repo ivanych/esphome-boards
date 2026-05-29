@@ -1,0 +1,31 @@
+# Светодиод (output_led)
+#
+# Параметры:
+#   pin: (обязательно, Pin Schema): настройки пина (pin.number: null)
+#   exposed (опционально, boolean): публиковать расширенную информацию (false)
+
+substitutions:
+  pin:
+    # null тут для того, чтобы не было варнинга про то,
+    # что в exposed_output_led не определена переменная pin.number,
+    # и при этом не задавать настоящий пин
+    number: null
+  exposed: false
+  exposed_output_led:
+    text_sensor:
+      # Номер пина, на котором работает светодиод
+      - platform: template
+        name: "[ext] LED Pin"
+        icon: mdi:connection
+        entity_category: diagnostic
+        lambda: 'return {"${pin.number}"};'
+
+output:
+  # Светодиод
+  - platform: gpio
+    id: output_led
+    pin: ${pin}
+
+packages:
+  # Публиковать расширенную информацию только по запросу
+  exposed: ${ exposed_output_led if exposed else {} }

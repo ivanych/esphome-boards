@@ -1,0 +1,36 @@
+# Выключатель (binary_sensor_switch)
+#
+# Параметры:
+#   pin: (обязательно, Pin Schema):     настройки пина (pin.number: null)
+#   debounce_delay (опционально, time): дребезг (30ms)
+#   exposed (опционально, boolean):     публиковать расширенную информацию (false)
+
+substitutions:
+  pin:
+    # null тут для того, чтобы не было варнинга про то,
+    # что в exposed_binary_sensor_switch не определена переменная pin.number,
+    # и при этом не задавать настоящий пин
+    number: null
+  debounce_delay: 30ms
+  exposed: false
+  exposed_binary_sensor_switch:
+    text_sensor:
+      # Номер пина, на котором работает выключатель
+      - platform: template
+        name: "[ext] Switch Pin"
+        icon: mdi:connection
+        entity_category: diagnostic
+        lambda: 'return {"${pin.number}"};'
+
+binary_sensor:
+  # Выключатель
+  - platform: gpio
+    name: "Switch"
+    id: binary_sensor_switch
+    pin: ${pin}
+    filters:
+      - delayed_on: ${debounce_delay}
+
+packages:
+  # Публиковать расширенную информацию только по запросу
+  exposed: ${ exposed_binary_sensor_switch if exposed else {} }

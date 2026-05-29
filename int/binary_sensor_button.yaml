@@ -1,0 +1,36 @@
+# Кнопка (binary_sensor_button)
+#
+# Параметры:
+#   pin: (обязательно, Pin Schema):     настройки пина (pin.number: null)
+#   debounce_delay (опционально, time): дребезг (30ms)
+#   exposed (опционально, boolean):     публиковать расширенную информацию (false)
+
+substitutions:
+  pin:
+    # null тут для того, чтобы не было варнинга про то,
+    # что в exposed_binary_sensor_button не определена переменная pin.number,
+    # и при этом не задавать настоящий пин
+    number: null
+  debounce_delay: 30ms
+  exposed: false
+  exposed_binary_sensor_button:
+    text_sensor:
+      # Номер пина, на котором работает кнопка
+      - platform: template
+        name: "[ext] Button Pin"
+        icon: mdi:connection
+        entity_category: diagnostic
+        lambda: 'return {"${pin.number}"};'
+
+binary_sensor:
+  # Кнопка
+  - platform: gpio
+    name: "Button"
+    id: binary_sensor_button
+    pin: ${pin}
+    filters:
+      - delayed_on: ${debounce_delay}
+
+packages:
+  # Публиковать расширенную информацию только по запросу
+  exposed: ${ exposed_binary_sensor_button if exposed else {} }
