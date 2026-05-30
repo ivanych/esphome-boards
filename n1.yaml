@@ -1,37 +1,36 @@
-# ESP32-S NodeMCU-32S
-# https://wiki.geekworm.com/NodeMCU-32S
+# ESP32 NodeMCU-32S
+# https://www.espboards.dev/esp32/nodemcu-32s/
 #
 # Управляемые объекты:
-#   - Кнопка     (binary_sensor_button)
 #   - Светодиод  (output_led)
+#   - Кнопка     (binary_sensor_button)
 # Неуправляемые объекты:
 #   - нет
 # + разные пины
 
 substitutions:
-  board_name: "n1"
   friendly_board_name: "N1"
   debounce_delay: 30ms
 
 esp32:
-  board: nodemcu-32s
+  variant: esp32
   framework:
     type: esp-idf
 
-binary_sensor:
-  # Кнопка
-  - platform: gpio
-    name: "Button"
-    id: binary_sensor_button
-    pin:
-      number: 0
-      inverted: true
-    filters:
-      - delayed_on: ${debounce_delay}
-
-output:
+packages:
   # Светодиод
-  - platform: gpio
-    id: output_led
-    pin:
-      number: 2
+  output_led: !include
+    file: int/output_led.yaml
+    vars:
+      pin:
+        number: 2
+        ignore_strapping_warning: true
+
+  # Кнопка
+  binary_sensor_button: !include
+    file: int/binary_sensor_button.yaml
+    vars:
+      pin:
+        number: 0
+        inverted: true
+        ignore_strapping_warning: true
