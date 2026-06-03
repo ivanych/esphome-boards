@@ -2,9 +2,9 @@
 # https://sonoff.tech/products/sonoff-pow-origin-smart-power-meter-switch
 #
 # Управляемые объекты:
-#   - Реле         (output_relay)
-#   - Светодиод    (output_led)
-#   - Кнопка       (binary_sensor_button)
+#   - Реле      (output_relay)
+#   - Светодиод (output_led)
+#   - Кнопка    (binary_sensor_button)
 # Неуправляемые объекты:
 #   - Статусный светодиод
 #   - Ваттметр

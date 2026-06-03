@@ -2,10 +2,10 @@
 # https://sonoff.tech/product/diy-smart-switches/minir4/
 #
 # Управляемые объекты:
-#   - Реле         (output_relay)
-#   - Светодиод    (output_led)
-#   - Кнопка       (binary_sensor_button)
-#   - Выключатель  (binary_sensor_switch)
+#   - Реле        (output_relay)
+#   - Светодиод   (output_led)
+#   - Кнопка      (binary_sensor_button)
+#   - Выключатель (binary_sensor_switch)
 # Неуправляемые объекты:
 #   - нет
 
