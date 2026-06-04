@@ -1,10 +1,12 @@
 # Светодиод (output_led)
 #
 # Параметры:
-#   pin: (обязательно, Pin Schema): настройки пина (pin.number: null)
+#   number (опционально, int):      номер светодиода (1)
+#   pin (обязательно, Pin Schema):  настройки пина (pin.number: null)
 #   exposed (опционально, boolean): публиковать расширенную информацию (false)
 
 substitutions:
+  number: 1
   pin:
     # null тут для того, чтобы не было варнинга про то,
     # что в exposed_output_led не определена переменная pin.number,
@@ -15,7 +17,7 @@ substitutions:
     text_sensor:
       # Номер пина, на котором работает светодиод
       - platform: template
-        name: "[ext] LED Pin"
+        name: "[ext] LED ${number} Pin"
         icon: mdi:connection
         entity_category: diagnostic
         lambda: 'return {"${pin.number}"};'
@@ -23,7 +25,7 @@ substitutions:
 output:
   # Светодиод
   - platform: gpio
-    id: output_led
+    id: output_led_${number}
     pin: ${pin}
 
 packages:
