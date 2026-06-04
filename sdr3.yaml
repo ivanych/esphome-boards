@@ -1,88 +1,81 @@
 # Sonoff DUALR3
 # https://sonoff.tech/product/diy-smart-switches/dualr3/
+#
+# Управляемые объекты:
+#   - Реле        (output_relay)          x2
+#   - Кнопка      (binary_sensor_button)
+#   - Выключатель (binary_sensor_switch)  x2
+# Неуправляемые объекты:
+#   - Статусный светодиод
+#   - Ваттметр
 
 substitutions:
-  board_name: "sdr3"
   friendly_board_name: "SDR3"
   debounce_delay: 30ms
 
 esp32:
-  # На самом деле там ESP32-D0WD-V3, но esphome не знает про такую плату и выдаёт ошибку
-  # Обсуждение - https://github.com/esphome/feature-requests/issues/2024
-  # На devices.esphome.io указана плата esp32dev
-  # https://devices.esphome.io/devices/Sonoff-Dual-R3
-  board: esp32dev
+  variant: esp32
   framework:
-    type: arduino
+    type: esp-idf
 
-status_led:
-  pin:
-    number: 13
-    inverted: true
+packages:
+  # Реле 1
+  output_relay_1: !include
+    file: int/output_relay.yaml
+    vars:
+      pin:
+        number: 27
 
-output:
-  # К реле прибит светодиод
-  - platform: gpio
-    id: output_relay_1
-    pin:
-      number: 27
+  # Реле 2
+  output_relay_2: !include
+    file: int/output_relay.yaml
+    vars:
+      number: 2
+      pin:
+        number: 14
 
-  # К реле прибит светодиод
-  - platform: gpio
-    id: output_relay_2
-    pin:
-      number: 14
+  # Кнопка
+  binary_sensor_button: !include
+    file: int/binary_sensor_button.yaml
+    vars:
+      pin:
+        number: 0
+        inverted: true
+        ignore_strapping_warning: true
 
-binary_sensor:
+  # Выключатель 1
+  binary_sensor_switch_1: !include
+    file: ../esphome-boards/int/binary_sensor_switch.yaml
+    vars:
+      pin:
+        number: 32
+        inverted: true
 
-  # Кнопка на плате
-  - platform: gpio
-    name: "Onboard button"
-    id: binary_sensor_onboard_button
-    pin:
-      number: 0
-      inverted: true
-    filters:
-      - delayed_on: ${debounce_delay}
+  # Выключатель 2
+  binary_sensor_switch_2: !include
+    file: ../esphome-boards/int/binary_sensor_switch.yaml
+    vars:
+      number: 2
+      pin:
+        number: 33
+        inverted: true
 
-  # Внешний выключатель
-  - platform: gpio
-    name: "External switch 1"
-    id: binary_sensor_external_switch_1
-    pin:
-      number: 32
-      inverted: true
-    filters:
-      - delayed_on: ${debounce_delay}
+  # Статусный светодиод
+  status_led: !include
+    file: int/status_led.yaml
+    vars:
+      pin:
+        number: 13
+        inverted: true
 
-  # Внешний выключатель
-  - platform: gpio
-    name: "External switch 2"
-    id: binary_sensor_external_switch_2
-    pin:
-      number: 33
-      inverted: true
-    filters:
-      - delayed_on: ${debounce_delay}
+  # Ваттметр
+  sensor_cse7766: !include
+    file: int/sensor_cse7761.yaml
 
+# UART для ваттметра
 uart:
   tx_pin: 25
   rx_pin: 26
   baud_rate: 38400
   parity: EVEN
   stop_bits: 1
-
-sensor:
-  - platform: cse7761
-    voltage:
-      name: 'Voltage'
-    current_1:
-      name: 'Current 1'
-    current_2:
-      name: 'Current 2'
-    active_power_1:
-      name: 'Power 1'
-      icon: 'mdi:speedometer'
-    active_power_2:
-      name: 'Power 2'
-      icon: 'mdi:speedometer'
