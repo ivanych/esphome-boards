@@ -1,83 +1,63 @@
 # Sonoff POWR316
 # https://sonoff.tech/products/sonoff-pow-origin-smart-power-meter-switch
 #
-# Управляемые объекты (интерфейс R4):
-#   - Реле с одним каналом (output_relay)
-#   - Кнопка на плате      (binary_sensor_onboard_button)
-#   - Светодиод на плате   (output_onboard_led)
+# Управляемые объекты:
+#   - Реле      (output_relay)
+#   - Светодиод (output_led)
+#   - Кнопка    (binary_sensor_button)
 # Неуправляемые объекты:
-#   - Ваттметр
 #   - Статусный светодиод
+#   - Ваттметр
 
 substitutions:
-  board_name: "sp316"
   friendly_board_name: "SP316"
   debounce_delay: 30ms
 
 esp32:
-  # На самом деле там ESP32-D0WD-V3, но esphome не знает про такую плату и выдаёт ошибку
-  # Обсуждение - https://github.com/esphome/feature-requests/issues/2024
-  # На devices.esphome.io указан variant esp32
-  # https://devices.esphome.io/devices/sonoff-powr316-16a
   variant: esp32
   framework:
     type: esp-idf
 
-output:
+packages:
   # Реле
-  - platform: gpio
-    id: output_relay
-    pin:
-      number: 13
+  output_relay: !include
+    file: int/output_relay.yaml
+    vars:
+      pin:
+        number: 13
 
-  # Светодиод на плате
-  - platform: gpio
-    id: output_onboard_led
-    pin:
-      number: 18
-      inverted: true
+  # Светодиод
+  output_led: !include
+    file: int/output_led.yaml
+    vars:
+      pin:
+        number: 18
+        inverted: true
 
-binary_sensor:
-  # Кнопка на плате
-  - platform: gpio
-    name: "Onboard button"
-    id: binary_sensor_onboard_button
-    pin:
-      number: 0
-      inverted: true
-    filters:
-      - delayed_on: ${debounce_delay}
+  # Кнопка
+  binary_sensor_button: !include
+    file: int/binary_sensor_button.yaml
+    vars:
+      pin:
+        number: 0
+        inverted: true
+        ignore_strapping_warning: true
+
+  # Статусный светодиод
+  status_led: !include
+    file: int/status_led.yaml
+    vars:
+      pin:
+        number: 5
+        inverted: true
+        ignore_strapping_warning: true
+
+  # Ваттметр
+  sensor_cse7766: !include
+    file: int/sensor_cse7766.yaml
 
 # UART для ваттметра
 uart:
   rx_pin: 16
   baud_rate: 4800
   parity: EVEN
-
-sensor:
-  # Ваттметр
-  - platform: cse7766
-    voltage:
-      name: 'Voltage'
-    current:
-      name: 'Current'
-    power:
-      name: 'Power'
-      icon: 'mdi:speedometer'
-    reactive_power:
-      name: "Reactive Power"
-      icon: 'mdi:speedometer'
-    apparent_power:
-      name: "Apparent Power"
-      icon: 'mdi:speedometer'
-    power_factor:
-      name: "Power Factor"
-    energy:
-      name: "Energy"
-      icon: 'mdi:delta'
-
-status_led:
-  # Статусный светодиод
-  pin:
-    number: 5
-    inverted: true

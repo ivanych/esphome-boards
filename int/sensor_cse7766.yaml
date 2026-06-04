@@ -1,0 +1,28 @@
+# Ваттметр CSE7766 (sensor_cse7766)
+#
+# ! На плате должен быть настроен UART
+#
+# Параметры:
+#   нет
+
+sensor:
+  # Ваттметр
+  - platform: cse7766
+    voltage:
+      name: 'Voltage'
+    current:
+      name: 'Current'
+    power:
+      name: 'Power'
+      icon: 'mdi:speedometer'
+    reactive_power:
+      name: "Reactive Power"
+      icon: 'mdi:speedometer'
+    apparent_power:
+      name: "Apparent Power"
+      icon: 'mdi:speedometer'
+    power_factor:
+      name: "Power Factor"
+    energy:
+      name: "Energy"
+      icon: 'mdi:delta'

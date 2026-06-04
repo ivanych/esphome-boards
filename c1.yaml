@@ -2,14 +2,13 @@
 # https://wiki.luatos.org/chips/esp32c3/board.html
 #
 # Управляемые объекты:
-#   - Кнопка     (binary_sensor_button)
 #   - Светодиод  (output_led)
+#   - Кнопка     (binary_sensor_button)
 # Неуправляемые объекты:
 #   - Статусный светодиод
 # + разные пины
 
 substitutions:
-  board_name: "c1"
   friendly_board_name: "C1"
   debounce_delay: 30ms
 
@@ -18,34 +17,34 @@ esphome:
     board_build.flash_mode: dio
 
 esp32:
-  board: esp32-c3-devkitm-1
+  variant: esp32c3
   framework:
     type: esp-idf
 
-binary_sensor:
-  # Кнопка
-  - platform: gpio
-    name: "Button"
-    id: binary_sensor_button
-    pin:
-      number: 9
-      inverted: true
-      ignore_strapping_warning: true
-    filters:
-      - delayed_on: ${debounce_delay}
-
-output:
+packages:
   # Светодиод
-  - platform: gpio
-    id: output_led
-    pin:
-      number: 12
-      # https://github.com/esphome/issues/issues/3744
-      ignore_pin_validation_error: true
+  output_led: !include
+    file: int/output_led.yaml
+    vars:
+      pin:
+        number: 12
+        # https://github.com/esphome/issues/issues/3744
+        ignore_pin_validation_error: true
 
-# Статусный светодиод
-status_led:
-  pin:
-    number: 13
-    # https://github.com/esphome/issues/issues/3744
-    ignore_pin_validation_error: true
+  # Кнопка
+  binary_sensor_button: !include
+    file: int/binary_sensor_button.yaml
+    vars:
+      pin:
+        number: 9
+        inverted: true
+        ignore_strapping_warning: true
+
+  # Статусный светодиод
+  status_led: !include
+    file: int/status_led.yaml
+    vars:
+      pin:
+        number: 13
+        # https://github.com/esphome/issues/issues/3744
+        ignore_pin_validation_error: true

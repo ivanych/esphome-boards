@@ -1,0 +1,28 @@
+# Ваттметр cse7761 (sensor_cse7761)
+#
+# ! На плате должен быть настроен UART:
+# uart:
+#   tx_pin: ?
+#   rx_pin: ?
+#   baud_rate: 38400
+#   parity: EVEN
+#   stop_bits: ?
+#
+# Параметры:
+#   нет
+
+sensor:
+  # Ваттметр
+  - platform: cse7761
+    voltage:
+      name: 'Voltage'
+    current_1:
+      name: 'Current 1'
+    current_2:
+      name: 'Current 2'
+    active_power_1:
+      name: 'Power 1'
+      icon: 'mdi:speedometer'
+    active_power_2:
+      name: 'Power 2'
+      icon: 'mdi:speedometer'
