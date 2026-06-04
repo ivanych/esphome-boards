@@ -45,7 +45,7 @@ packages:
 
   # Выключатель 1
   binary_sensor_switch_1: !include
-    file: ../esphome-boards/int/binary_sensor_switch.yaml
+    file: int/binary_sensor_switch.yaml
     vars:
       pin:
         number: 32
@@ -53,7 +53,7 @@ packages:
 
   # Выключатель 2
   binary_sensor_switch_2: !include
-    file: ../esphome-boards/int/binary_sensor_switch.yaml
+    file: int/binary_sensor_switch.yaml
     vars:
       number: 2
       pin:
