@@ -23,6 +23,7 @@ packages:
     vars:
       pin:
         number: 2
+        ignore_strapping_warning: true
 
   # Кнопка
   binary_sensor_button: !include
