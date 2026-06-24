@@ -1,0 +1,38 @@
+# Люксметр (sensor_luxometer)
+#
+# Параметры:
+#   number (опционально, int):          номер люксметра (1)
+#   pin (обязательно, Pin Schema):      настройки пина (pin.number: null)
+#   exposed (опционально, boolean):     публиковать расширенную информацию (false)
+
+substitutions:
+  number: 1
+  pin:
+    # null тут для того, чтобы не было варнинга про то,
+    # что в exposed_sensor_luxometer
+    # не определена переменная ${pin.number},
+    # и при этом не задавать настоящий пин
+    number: null
+  exposed: false
+  exposed_sensor_luxometer:
+    text_sensor:
+      # Номер пина, на котором работает люксметр
+      - platform: template
+        name: "[ext] Luxometer ${number} Pin"
+        icon: mdi:connection
+        entity_category: diagnostic
+        lambda: 'return {"${pin.number}"};'
+
+sensor:
+  - platform: adc
+    name: "Luxometer ${number}"
+    id: sensor_luxometer_${number}
+    unit_of_measurement: "V"
+    device_class: voltage
+    state_class: measurement
+    pin: ${pin}
+    attenuation: auto
+
+packages:
+  # Публиковать расширенную информацию только по запросу
+  exposed: ${ exposed_sensor_luxometer if exposed else {} }
