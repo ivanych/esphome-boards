@@ -23,6 +23,14 @@ sensor:
     active_power_1:
       name: 'Power 1'
       icon: 'mdi:speedometer'
+      filters:
+        # Это костыль для исправления бага
+        # https://github.com/esphome/esphome/issues/16708
+        - lambda: 'return abs(x);'
     active_power_2:
       name: 'Power 2'
       icon: 'mdi:speedometer'
+      filters:
+        # Это костыль для исправления бага
+        # https://github.com/esphome/esphome/issues/16708
+        - lambda: 'return abs(x);'
