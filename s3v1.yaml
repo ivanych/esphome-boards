@@ -5,7 +5,7 @@
 #   - Светодиод  (output_led)
 #   - Кнопка     (binary_sensor_button)
 # Неуправляемые объекты:
-#   - нет
+#   - Камера
 # + разные пины
 
 substitutions:
@@ -15,6 +15,19 @@ esp32:
   variant: esp32s3
   framework:
     type: esp-idf
+
+# I2C
+i2c:
+  # Идентификатор "i2c_bus" — дефолтное значение, используемое в интерфейсах,
+  # использующих шину I2C
+  - id: i2c_bus
+    sda: 4
+    scl: 5
+
+# Память PSRAM
+psram:
+  mode: octal
+  speed: 80MHz
 
 packages:
   # Светодиод
@@ -32,3 +45,7 @@ packages:
         number: 0
         inverted: true
         ignore_strapping_warning: true
+
+  # Камера
+  esp32_camera: !include
+    file: int/esp32_camera.yaml

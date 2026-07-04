@@ -1,0 +1,22 @@
+# Камера (esp32_camera)
+#
+# Параметры:
+#   number (опционально, int):      номер камеры (1)
+#   i2c_id (опционально, str):      идентификатор шины I2C (i2c_bus)
+
+substitutions:
+  number: 1
+  i2c_id: i2c_bus
+
+# Камера
+esp32_camera:
+  name: "Camera ${number}"
+  external_clock:
+    pin: 15
+    frequency: 12MHz #12MHz #20MHz
+  i2c_id: ${i2c_id}
+  data_pins: [ 11, 9, 8, 10, 12, 18, 17, 16 ]
+  vsync_pin: 6
+  href_pin: 7
+  pixel_clock_pin: 13
+  frame_buffer_count: 2
