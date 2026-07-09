@@ -2,15 +2,16 @@
 #
 # Параметры:
 #   number (опционально, int):      номер камеры (1)
-#   i2c_id (опционально, str):      идентификатор шины I2C (i2c_bus)
+#   i2c_id (опционально, str):      идентификатор шины I2C (i2c_1)
 
 substitutions:
   number: 1
-  i2c_id: i2c_bus
+  i2c_id: i2c_1
 
 # Камера
 esp32_camera:
   name: "Camera ${number}"
+  id: esp32_camera_${number}
   external_clock:
     pin: 15
     frequency: 12MHz #12MHz #20MHz
