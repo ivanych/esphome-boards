@@ -1,11 +1,13 @@
-# ESP32-S3 N16R8 CAM
+# S3V1 (ESP32-S3 N16R8 CAM OV5640)
 # https://www.oceanlabz.in/getting-started-with-esp32-s3-wroom-n16r8-cam-dev-board/
 #
 # Управляемые объекты:
-#   - Светодиод  (output_led)
-#   - Кнопка     (binary_sensor_button)
+#   - Индикатор                         (ligh_indicator)
+#   - Подсветка                         (ligh_flash)
+#   - Кнопка                            (binary_sensor_button)
+#   - Камера                            (esp32_camera)
 # Неуправляемые объекты:
-#   - Камера
+#   - Статусный индикатор
 # + разные пины
 
 substitutions:
@@ -30,12 +32,23 @@ psram:
   speed: 80MHz
 
 packages:
-  # Светодиод
-  output_led: !include
-    file: int/output_led.yaml
+  # Индикатор (бинарный светодиод)
+  indicator: !include
+    file: int/light_indicator/binary_led.yaml
     vars:
       pin:
         number: 2
+
+  # Статусный индикатор (совмещённый с индикатором)
+  status: !include
+    file: int/light_status/light_indicator.yaml
+
+  # Подсветка (адресный светодиод)
+  flash: !include
+    file: int/light_flash/addr_led.yaml
+    vars:
+      pin:
+        number: 48
 
   # Кнопка
   binary_sensor_button: !include
@@ -46,6 +59,15 @@ packages:
         inverted: true
         ignore_strapping_warning: true
 
-  # Камера
-  esp32_camera: !include
-    file: int/esp32_camera.yaml
+  # Камера (стандартная камера)
+  camera: !include
+    file: int/esp32_camera/esp32_camera.yaml
+    vars:
+      data_pins: [ 11, 9, 8, 10, 12, 18, 17, 16 ]
+      vsync_pin: 6
+      href_pin: 7
+      external_clock:
+        pin:
+          number: 15
+        frequency: 12MHz
+      pixel_clock_pin: 13
