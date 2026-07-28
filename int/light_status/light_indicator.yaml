@@ -1,0 +1,12 @@
+# Статусный индикатор
+# Совмещение с индикатором (требуется выходной пин индикатора output_light_indicator)
+
+substitutions:
+  number: 1
+
+light:
+  # Статусный индикатор, совмещённый с индикатором
+  - platform: status_led
+    id: light_status_${number}
+    internal: true
+    output: output_light_indicator_${number}
