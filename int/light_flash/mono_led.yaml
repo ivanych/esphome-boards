@@ -1,0 +1,36 @@
+# Подсветка (light_flash)
+# Одноцветный светодиод
+
+substitutions:
+  number: 1
+  pin:
+    # null тут для того, чтобы не было варнинга про то,
+    # что в exposed_light_flash не определена переменная pin.number,
+    # и при этом не задавать настоящий пин
+    number: null
+  exposed: false
+
+  exposed_light_flash:
+    text_sensor:
+      # Номер пина, на котором работает подсветка
+      - platform: template
+        name: "[ext] light_flash_${number}.pin"
+        icon: mdi:connection
+        entity_category: diagnostic
+        lambda: 'return {"${pin.number}"};'
+
+light:
+  # Одноцветный светодиод
+  - platform: monochromatic
+    id: light_flash_${number}
+    output: output_light_flash_${number}
+
+output:
+  # Выходной пин
+  - platform: ledc
+    id: output_light_flash_${number}
+    pin: ${pin}
+
+packages:
+  # Публиковать расширенную информацию только по запросу
+  exposed: ${ exposed_light_flash if exposed else {} }
