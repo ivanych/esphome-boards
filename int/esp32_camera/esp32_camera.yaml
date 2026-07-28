@@ -1,0 +1,27 @@
+# Камера (esp32_camera)
+# Стандартная камера
+
+substitutions:
+  number: 1
+  i2c_id: i2c_1
+  data_pins: [ 11, 9, 8, 10, 12, 18, 17, 16 ]
+  vsync_pin: 6
+  href_pin: 7
+  external_clock:
+    pin: 15
+    frequency: 12MHz
+  pixel_clock_pin: 13
+
+# Камера (стандартный набор пинов)
+esp32_camera:
+  id: esp32_camera_${number}
+  i2c_id: ${i2c_id}
+  data_pins: ${data_pins}
+  vsync_pin: ${vsync_pin}
+  href_pin: ${href_pin}
+  external_clock: ${external_clock}
+  pixel_clock_pin: ${pixel_clock_pin}
+  frame_buffer_count: 2
+
+  # На некоторых платах могут быть дополнительные пины
+  # power_down_pin: PIN
