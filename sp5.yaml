@@ -1,0 +1,84 @@
+# SP530E
+# https://www.aliexpress.com/item/1005006472928868.html
+
+substitutions:
+  board_name: "sp5"
+  debounce_delay: 30ms
+
+esp32:
+
+  # Вроде бы тут должна быть плата esp32-c3-devkitm-1,
+  # но в этом случае SP530E не работает, как будто уходит в бесконечную перезагрузку.
+  # Если указать плату airm2m_core_esp32c3, то это исправляет ситуацию.
+  # Похоже, что проблема в диодах, которые в SP530E висят на пинах 0 и 1.
+  # Предполагаю, что это как-то конфликтует с пином, переводящим плату в режим загрузки на старте,
+  # который вроде обычно как-раз на IO0.
+  # В плате airm2m_core_esp32c3 делается переопределение пинов диодов на 12 и 13,
+  # видимо это исправляет проблему.
+  # https://github.com/esphome/esphome/blob/dev/esphome/components/esp32/boards.py
+  #   "airm2m_core_esp32c3": {
+  #       "LED1_BUILTIN": 12,
+  #       "LED2_BUILTIN": 13,
+  #   },
+  board: airm2m_core_esp32c3
+  framework:
+    type: arduino
+
+output:
+
+  # Светодиод на плате (зелёный)
+  - platform: gpio
+    id: output_onboard_led
+    pin:
+      number: 1
+      inverted: true
+
+  # R
+  - platform: gpio
+    id: output_r
+    pin:
+      number: 10
+      inverted: true
+  # G
+  - platform: gpio
+    id: output_g
+    pin:
+      number: 7
+      inverted: true
+  # B
+  - platform: gpio
+    id: output_b
+    pin:
+      number: 6
+      inverted: true
+  # C
+  - platform: gpio
+    id: output_c
+    pin:
+      number: 4
+      inverted: true
+  # W
+  - platform: gpio
+    id: output_w
+    pin:
+      number: 5
+      inverted: true
+
+status_led:
+
+  # Светодиод на плате (синий)
+  pin:
+    number: 0
+    inverted: true
+
+binary_sensor:
+
+  # Кнопка на плате
+  - platform: gpio
+    name: "Onboard button"
+    id: binary_sensor_onboard_button
+    pin:
+      number: 8
+      inverted: true
+    filters:
+      - delayed_on: ${debounce_delay}
