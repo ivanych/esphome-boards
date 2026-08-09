@@ -1,5 +1,4 @@
 # Камера (esp32_camera)
-# Стандартная камера
 
 substitutions:
   number: 1
@@ -11,8 +10,14 @@ substitutions:
     pin: 15
     frequency: 12MHz
   pixel_clock_pin: 13
+  power_down_pin: null
 
-# Камера (стандартный набор пинов)
+  # Опциональный пин power_down_pin
+  exposed_power_down_pin:
+    esp32_camera:
+      power_down_pin: 32
+
+# Камера
 esp32_camera:
   id: esp32_camera_${number}
   i2c_id: ${i2c_id}
@@ -23,5 +28,6 @@ esp32_camera:
   pixel_clock_pin: ${pixel_clock_pin}
   frame_buffer_count: 2
 
-  # На некоторых платах могут быть дополнительные пины
-  # power_down_pin: PIN
+packages:
+  # Опциональный пин power_down_pin
+  power_down_pin: ${ exposed_power_down_pin if power_down_pin else {} }
