@@ -3,58 +3,25 @@
 # https://randomnerdtutorials.com/esp32-cam-ai-thinker-pinout/
 #
 # Управляемые объекты:
-#   - Индикатор                         (ligh_indicator)
-#   - Подсветка                         (ligh_flash)
-#   - Кнопка                            (binary_sensor_button)
-#   - Камера                            (esp32_camera)
+#   - Одноцветный светодиод 1 (обычный) (output.mono_led)
+#   - Одноцветный светодиод 2 (яркий)   (output.mono_led)
+#   - Ключ (кнопка)                     (binary_sensor.key)
+#   - Камера (стандартная камера)       (esp32_camera)
 # Неуправляемые объекты:
-#   - Статусный индикатор
+#   - нет
 # + разные пины
 
 substitutions:
   friendly_board_name: "S1V2"
 
-esp32:
-  variant: esp32
-  framework:
-    type: esp-idf
+  # Использовать ключ?
+  key: false
+  # Использовать камеру?
+  esp32_camera: false
 
-# I2C
-i2c:
-  # Идентификатор "i2c_1" — дефолтное значение, используемое в интерфейсах,
-  # использующих шину I2C
-  - id: i2c_1
-    sda: 26
-    scl: 27
-
-# Память PSRAM
-psram:
-  mode: quad
-  speed: 80MHz
-
-packages:
-  # Индикатор (бинарный светодиод)
-  indicator: !include
-    file: int/light_indicator/binary_led.yaml
-    vars:
-      pin:
-        number: 33
-        inverted: true
-
-  # Статусный индикатор (совмещённый с индикатором)
-  status: !include
-    file: int/light_status/light_indicator.yaml
-
-  # Подсветка (одноцветный светодиод)
-  flash: !include
-    file: int/light_flash/mono_led.yaml
-    vars:
-      pin:
-        number: 4
-
-  # Кнопка
-  binary_sensor_button: !include
-    file: int/binary_sensor_button.yaml
+  # Ключ (кнопка)
+  exposed_key: !include
+    file: int/binary_sensor/key.yaml
     vars:
       pin:
         number: 0
@@ -62,7 +29,7 @@ packages:
         ignore_strapping_warning: true
 
   # Камера (стандартная камера)
-  camera: !include
+  exposed_esp32_camera: !include
     file: int/esp32_camera/esp32_camera.yaml
     vars:
       data_pins:
@@ -87,7 +54,46 @@ packages:
           ignore_strapping_warning: true
         frequency: 12MHz
       pixel_clock_pin: 22
+      # На S1V2 у камеры есть опциональный пин power_down_pin
+      power_down_pin: 32
 
-# На S1V2 у камеры есть дополнительный пин
-esp32_camera:
-  power_down_pin: 32
+esp32:
+  variant: esp32
+  framework:
+    type: esp-idf
+
+# I2C
+i2c:
+  # Идентификатор "i2c_1" — дефолтное значение, используемое в интерфейсах,
+  # использующих шину I2C
+  - id: i2c_1
+    sda: 26
+    scl: 27
+
+# Память PSRAM
+psram:
+  mode: quad
+  speed: 80MHz
+
+packages:
+  # Одноцветный светодиод 1 (обычный)
+  mono_led: !include
+    file: int/output/mono_led.yaml
+    vars:
+      pin:
+        number: 33
+        inverted: true
+
+  # Одноцветный светодиод 2 (яркий)
+  mono_led_2: !include
+    file: int/output/mono_led.yaml
+    vars:
+      number: 2
+      pin:
+        number: 4
+
+  # Ключ (кнопка)
+  key: ${ exposed_key if key else {} }
+
+  # Камера (стандартная камера)
+  esp32_camera: ${ exposed_esp32_camera if esp32_camera else {} }
