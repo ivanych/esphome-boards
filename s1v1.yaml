@@ -1,9 +1,10 @@
-# ESP32 30-Pin DevKit (Generic Clone)
+# S1V1 (ESP32 30-Pin DevKit)
 # https://www.espboards.dev/esp32/esp32-30pin-devkit-generic/
 #
+#
 # Управляемые объекты:
-#   - Светодиод     (output_led)
-#   - Кнопка        (binary_sensor_button)
+#   - Одноцветный светодиод (обычный)   (output.mono_led)
+#   - Ключ (кнопка)                     (binary_sensor.key)
 # Неуправляемые объекты:
 #   - нет
 # + разные пины
@@ -17,17 +18,17 @@ esp32:
     type: esp-idf
 
 packages:
-  # Светодиод
-  output_led: !include
-    file: int/output_led.yaml
+  # Одноцветный светодиод
+  mono_led: !include
+    file: int/output/mono_led.yaml
     vars:
       pin:
         number: 2
         ignore_strapping_warning: true
 
-  # Кнопка
-  binary_sensor_button: !include
-    file: int/binary_sensor_button.yaml
+  # Ключ (кнопка)
+  button: !include
+    file: int/binary_sensor/key.yaml
     vars:
       pin:
         number: 0
