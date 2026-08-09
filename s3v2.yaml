@@ -1,0 +1,74 @@
+# S3V2 (ESP32-S3 N16R8 CAM OV5640)
+# https://www.oceanlabz.in/getting-started-with-esp32-s3-wroom-n16r8-cam-dev-board/
+#
+#
+# Управляемые объекты:
+#   - Одноцветный светодиод (обычный)   (output.mono_led)
+#   - Адресная лента (один светодиод)   (light.addr_strip)
+#   - Ключ (кнопка)                     (binary_sensor.key)
+#   - Камера (стандартная камера)       (esp32_camera)
+# Неуправляемые объекты:
+#   - нет
+# + разные пины
+
+substitutions:
+  friendly_board_name: "S3V2"
+
+  # Использовать ключ?
+  key: false
+  # Использовать камеру?
+  esp32_camera: false
+
+  # Ключ (кнопка)
+  exposed_key: !include
+    file: int/binary_sensor/key.yaml
+    vars:
+      pin:
+        number: 0
+        inverted: true
+        ignore_strapping_warning: true
+
+  # Камера (стандартная камера)
+  exposed_esp32_camera: !include
+    file: int/esp32_camera/esp32_camera.yaml
+    vars:
+      data_pins: [ 11, 9, 8, 10, 12, 18, 17, 16 ]
+      vsync_pin: 6
+      href_pin: 7
+      external_clock:
+        pin:
+          number: 15
+        frequency: 12MHz
+      pixel_clock_pin: 13
+
+esp32:
+  variant: esp32s3
+  framework:
+    type: esp-idf
+
+# I2C
+i2c:
+  # Идентификатор "i2c_1" — дефолтное значение, используемое в интерфейсах,
+  # использующих шину I2C
+  - id: i2c_1
+    sda: 4
+    scl: 5
+
+# Память PSRAM
+psram:
+  mode: octal
+  speed: 80MHz
+
+packages:
+  # Одноцветный светодиод
+  mono_led: !include
+    file: int/output/mono_led.yaml
+    vars:
+      pin:
+        number: 2
+
+  # Ключ (кнопка)
+  key: ${ exposed_key if key else {} }
+
+  # Камера (стандартная камера)
+  esp32_camera: ${ exposed_esp32_camera if esp32_camera else {} }
