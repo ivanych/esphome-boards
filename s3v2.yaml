@@ -14,10 +14,19 @@
 substitutions:
   friendly_board_name: "S3V2"
 
+  # Использовать одноцветный светодиод?
+  mono_led: false
   # Использовать ключ?
   key: false
   # Использовать камеру?
   esp32_camera: false
+
+  # Одноцветный светодиод (обычный)
+  exposed_mono_led: !include
+    file: int/output/mono_led.yaml
+    vars:
+      pin:
+        number: 2
 
   # Ключ (кнопка)
   exposed_key: !include
@@ -60,12 +69,8 @@ psram:
   speed: 80MHz
 
 packages:
-  # Одноцветный светодиод
-  mono_led: !include
-    file: int/output/mono_led.yaml
-    vars:
-      pin:
-        number: 2
+  # Одноцветный светодиод (обычный)
+  mono_led: ${ exposed_mono_led if mono_led else {} }
 
   # Ключ (кнопка)
   key: ${ exposed_key if key else {} }
