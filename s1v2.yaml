@@ -14,10 +14,30 @@
 substitutions:
   friendly_board_name: "S1V2"
 
+  # Использовать одноцветный светодиод 1?
+  mono_led_1: false
+  # Использовать одноцветный светодиод 2?
+  mono_led_2: false
   # Использовать ключ?
   key: false
   # Использовать камеру?
   esp32_camera: false
+
+  # Одноцветный светодиод 1 (обычный)
+  exposed_mono_led_1: !include
+    file: int/output/mono_led.yaml
+    vars:
+      pin:
+        number: 33
+        inverted: true
+
+  # Одноцветный светодиод 2 (яркий)
+  exposed_mono_led_2: !include
+    file: int/output/mono_led.yaml
+    vars:
+      number: 2
+      pin:
+        number: 4
 
   # Ключ (кнопка)
   exposed_key: !include
@@ -77,20 +97,10 @@ psram:
 
 packages:
   # Одноцветный светодиод 1 (обычный)
-  mono_led: !include
-    file: int/output/mono_led.yaml
-    vars:
-      pin:
-        number: 33
-        inverted: true
+  mono_led_1: ${ exposed_mono_led_1 if mono_led_1 else {} }
 
   # Одноцветный светодиод 2 (яркий)
-  mono_led_2: !include
-    file: int/output/mono_led.yaml
-    vars:
-      number: 2
-      pin:
-        number: 4
+  mono_led_2: ${ exposed_mono_led_2 if mono_led_2 else {} }
 
   # Ключ (кнопка)
   key: ${ exposed_key if key else {} }
