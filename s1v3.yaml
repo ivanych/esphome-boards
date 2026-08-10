@@ -1,16 +1,16 @@
-# ESP32 NodeMCU-32S
+# S1V3 (ESP32 NodeMCU-32S)
 # https://www.espboards.dev/esp32/nodemcu-32s/
 #
+#
 # Управляемые объекты:
-#   - Светодиод  (output_led)
-#   - Кнопка     (binary_sensor_button)
+#   - Одноцветный светодиод (обычный)   (output.mono_led)
+#   - Ключ (кнопка)                     (binary_sensor.key)
 # Неуправляемые объекты:
 #   - нет
 # + разные пины
 
 substitutions:
-  friendly_board_name: "N1"
-  debounce_delay: 30ms
+  friendly_board_name: "S1V3"
 
 esp32:
   variant: esp32
@@ -18,17 +18,17 @@ esp32:
     type: esp-idf
 
 packages:
-  # Светодиод
-  output_led: !include
-    file: int/output_led.yaml
+  # Одноцветный светодиод
+  mono_led: !include
+    file: int/output/mono_led.yaml
     vars:
       pin:
         number: 2
         ignore_strapping_warning: true
 
-  # Кнопка
-  binary_sensor_button: !include
-    file: int/binary_sensor_button.yaml
+  # Ключ (кнопка)
+  button: !include
+    file: int/binary_sensor/key.yaml
     vars:
       pin:
         number: 0
