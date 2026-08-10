@@ -12,14 +12,13 @@
 substitutions:
   friendly_board_name: "S1V1"
 
-esp32:
-  variant: esp32
-  framework:
-    type: esp-idf
+  # Использовать одноцветный светодиод?
+  mono_led: false
+  # Использовать ключ?
+  key: false
 
-packages:
-  # Одноцветный светодиод
-  mono_led: !include
+  # Одноцветный светодиод (обычный)
+  exposed_mono_led: !include
     file: int/output/mono_led.yaml
     vars:
       pin:
@@ -27,10 +26,22 @@ packages:
         ignore_strapping_warning: true
 
   # Ключ (кнопка)
-  button: !include
+  exposed_key: !include
     file: int/binary_sensor/key.yaml
     vars:
       pin:
         number: 0
         inverted: true
         ignore_strapping_warning: true
+
+esp32:
+  variant: esp32
+  framework:
+    type: esp-idf
+
+packages:
+  # Одноцветный светодиод (обычный)
+  mono_led: ${ exposed_mono_led if mono_led else {} }
+
+  # Ключ (кнопка)
+  key: ${ exposed_key if key else {} }
