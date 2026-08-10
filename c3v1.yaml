@@ -1,0 +1,68 @@
+# C3V1 (ESP32-C3 Luatos CORE-ESP32)
+# https://www.espboards.dev/esp32/airm2m-core-esp32c3/
+# https://wiki.luatos.org/chips/esp32c3/board.html
+#
+# Управляемые объекты:
+#   - Одноцветный светодиод 1 (обычный) (output.mono_led)
+#   - Одноцветный светодиод 2 (обычный) (output.mono_led)
+#   - Ключ (кнопка)                     (binary_sensor.key)
+# Неуправляемые объекты:
+#   - нет
+# + разные пины
+
+substitutions:
+  friendly_board_name: "С3V1"
+
+  # Использовать одноцветный светодиод 1?
+  mono_led_1: false
+  # Использовать одноцветный светодиод 2?
+  mono_led_2: false
+  # Использовать ключ?
+  key: false
+
+  # Одноцветный светодиод 1 (обычный)
+  exposed_mono_led_1: !include
+    file: int/output/mono_led.yaml
+    vars:
+      pin:
+        number: 12
+        # https://github.com/esphome/issues/issues/3744
+        ignore_pin_validation_error: true
+
+  # Одноцветный светодиод 2 (обычный)
+  exposed_mono_led_2: !include
+    file: int/output/mono_led.yaml
+    vars:
+      number: 2
+      pin:
+        number: 13
+        # https://github.com/esphome/issues/issues/3744
+        ignore_pin_validation_error: true
+
+  # Ключ (кнопка)
+  exposed_key: !include
+    file: int/binary_sensor/key.yaml
+    vars:
+      pin:
+        number: 9
+        inverted: true
+        ignore_strapping_warning: true
+
+esphome:
+  platformio_options:
+    board_build.flash_mode: dio
+
+esp32:
+  variant: esp32c3
+  framework:
+    type: esp-idf
+
+packages:
+  # Одноцветный светодиод 1 (обычный)
+  mono_led_1: ${ exposed_mono_led_1 if mono_led_1 else {} }
+
+  # Одноцветный светодиод 2 (обычный)
+  mono_led_2: ${ exposed_mono_led_2 if mono_led_2 else {} }
+
+  # Ключ (кнопка)
+  key: ${ exposed_key if key else {} }
