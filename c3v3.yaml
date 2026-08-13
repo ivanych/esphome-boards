@@ -1,0 +1,51 @@
+# C3V3 (ESP32-C3 Super Mini Plus)
+# https://www.espboards.dev/esp32/esp32-c3-super-mini-plus/
+#
+#
+# Управляемые объекты:
+#   - Одноцветный светодиод (обычный)   (output.mono_led)
+#   - Ключ (кнопка)                     (binary_sensor.key)
+# Неуправляемые объекты:
+#   - нет
+# + разные пины
+
+substitutions:
+  friendly_board_name: "C3V3"
+
+  # Использовать одноцветный светодиод?
+  mono_led: false
+  # Использовать ключ?
+  key: false
+
+  # Одноцветный светодиод (обычный)
+  exposed_mono_led: !include
+    file: int/output/mono_led.yaml
+    vars:
+      pin:
+        number: 8
+        ignore_strapping_warning: true
+
+  # Ключ (кнопка)
+  exposed_key: !include
+    file: int/binary_sensor/key.yaml
+    vars:
+      pin:
+        number: 9
+        inverted: true
+        ignore_strapping_warning: true
+
+esphome:
+  platformio_options:
+    board_build.flash_mode: dio
+
+esp32:
+  variant: esp32c3
+  framework:
+    type: esp-idf
+
+packages:
+  # Одноцветный светодиод (обычный)
+  mono_led: ${ exposed_mono_led if mono_led else {} }
+
+  # Ключ (кнопка)
+  key: ${ exposed_key if key else {} }
