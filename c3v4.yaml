@@ -1,0 +1,49 @@
+# C3V4 (ESP32-C3 Zero)
+# https://www.espboards.dev/esp32/esp32-c3-zero/
+#
+#
+# Управляемые объекты:
+#   - Адресная лента (один светодиод)   (light.addr_strip)
+#   - Ключ (кнопка)                     (binary_sensor.key)
+# Неуправляемые объекты:
+#   - нет
+# + разные пины
+
+substitutions:
+  friendly_board_name: "C3V4"
+
+  # Использовать адресную ленту?
+  use_addr_strip: false
+  # Использовать ключ?
+  use_key: false
+
+  # Адресная лента
+  addr_strip: !include
+    file: int/light/addr_strip.yaml
+    vars:
+      pin:
+        number: 10
+
+  # Ключ
+  key: !include
+    file: int/binary_sensor/key.yaml
+    vars:
+      pin:
+        number: 9
+        inverted: true
+        ignore_strapping_warning: true
+        mode:
+          input: true
+          pullup: true
+
+esp32:
+  variant: esp32c3
+  framework:
+    type: esp-idf
+
+packages:
+  # Адресная лента
+  addr_strip: ${ addr_strip if use_addr_strip else {} }
+
+  # Ключ
+  key: ${ key if use_key else {} }
