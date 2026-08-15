@@ -1,33 +1,33 @@
-# Подсветка (light_flash)
-# Адресный светодиод
+# Адресная лента (light.addr_strip)
 
 substitutions:
   number: 1
   pin:
     # null тут для того, чтобы не было варнинга про то,
-    # что в exposed_light_flash не определена переменная pin.number,
+    # что в exposed_addr_strip не определена переменная pin.number,
     # и при этом не задавать настоящий пин
     number: null
+  num_leds: 1
   exposed: false
 
-  exposed_light_flash:
+  exposed_addr_strip:
     text_sensor:
-      # Номер пина, на котором работает подсветка
+      # Номер пина
       - platform: template
-        name: "[ext] light_flash_${number}.pin"
+        name: "[ext] addr_strip_${number}.pin"
         icon: mdi:connection
         entity_category: diagnostic
         lambda: 'return {"${pin.number}"};'
 
 light:
-  # Адресный светодиод (адресная лента с одним светодиодом)
+  # Адресная лента
   - platform: esp32_rmt_led_strip
-    id: light_flash_${number}
+    id: addr_strip_${number}
     pin: ${pin}
     chipset: ws2812
-    num_leds: 1
+    num_leds: ${num_leds}
     rgb_order: GRB
 
 packages:
   # Публиковать расширенную информацию только по запросу
-  exposed: ${ exposed_light_flash if exposed else {} }
+  exposed_addr_strip: ${ exposed_addr_strip if exposed else {} }
