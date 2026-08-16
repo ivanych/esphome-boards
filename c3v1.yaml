@@ -11,7 +11,7 @@
 # + разные пины
 
 substitutions:
-  friendly_board_name: "С3V1"
+  friendly_board_name: "C3V1"
 
   # Использовать одноцветный светодиод 1?
   mono_led_1: false

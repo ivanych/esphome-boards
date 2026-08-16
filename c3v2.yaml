@@ -46,7 +46,7 @@ esp32:
 
 packages:
   # Одноцветный светодиод (обычный)
-  mono_led_1: ${ exposed_mono_led if mono_led else {} }
+  mono_led: ${ exposed_mono_led if mono_led else {} }
 
   # Ключ (кнопка)
   key: ${ exposed_key if key else {} }
