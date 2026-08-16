@@ -13,12 +13,12 @@ substitutions:
   friendly_board_name: "C3V2"
 
   # Использовать одноцветный светодиод?
-  mono_led: false
+  use_mono_led: false
   # Использовать ключ?
-  key: false
+  use_key: false
 
   # Одноцветный светодиод (обычный)
-  exposed_mono_led: !include
+  mono_led: !include
     file: int/output/mono_led.yaml
     vars:
       pin:
@@ -27,17 +27,16 @@ substitutions:
         ignore_strapping_warning: true
 
   # Ключ (кнопка)
-  exposed_key: !include
+  key: !include
     file: int/binary_sensor/key.yaml
     vars:
       pin:
         number: 9
         inverted: true
         ignore_strapping_warning: true
-
-esphome:
-  platformio_options:
-    board_build.flash_mode: dio
+        mode:
+          input: true
+          pullup: true
 
 esp32:
   variant: esp32c3
@@ -46,7 +45,7 @@ esp32:
 
 packages:
   # Одноцветный светодиод (обычный)
-  mono_led: ${ exposed_mono_led if mono_led else {} }
+  mono_led: ${ mono_led if use_mono_led else {} }
 
   # Ключ (кнопка)
-  key: ${ exposed_key if key else {} }
+  key: ${ key if use_key else {} }
