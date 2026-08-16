@@ -1,5 +1,5 @@
-# S1V1 (ESP32 30-Pin DevKit)
-# https://www.espboards.dev/esp32/esp32-30pin-devkit-generic/
+# C3V2 (ESP32-C3 Super Mini)
+# https://www.espboards.dev/esp32/esp32-c3-super-mini/
 #
 #
 # Управляемые объекты:
@@ -10,7 +10,7 @@
 # + разные пины
 
 substitutions:
-  friendly_board_name: "S1V1"
+  friendly_board_name: "C3V2"
 
   # Использовать одноцветный светодиод?
   use_mono_led: false
@@ -22,7 +22,8 @@ substitutions:
     file: int/output/mono_led.yaml
     vars:
       pin:
-        number: 2
+        number: 8
+        inverted: true
         ignore_strapping_warning: true
 
   # Ключ (кнопка)
@@ -30,7 +31,7 @@ substitutions:
     file: int/binary_sensor/key.yaml
     vars:
       pin:
-        number: 0
+        number: 9
         inverted: true
         ignore_strapping_warning: true
         mode:
@@ -38,7 +39,7 @@ substitutions:
           pullup: true
 
 esp32:
-  variant: esp32
+  variant: esp32c3
   framework:
     type: esp-idf
 

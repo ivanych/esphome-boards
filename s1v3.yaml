@@ -1,5 +1,5 @@
-# S1V1 (ESP32 30-Pin DevKit)
-# https://www.espboards.dev/esp32/esp32-30pin-devkit-generic/
+# S1V3 (ESP32 NodeMCU-32S)
+# https://www.espboards.dev/esp32/nodemcu-32s/
 #
 #
 # Управляемые объекты:
@@ -10,14 +10,14 @@
 # + разные пины
 
 substitutions:
-  friendly_board_name: "S1V1"
+  friendly_board_name: "S1V3"
 
   # Использовать одноцветный светодиод?
   use_mono_led: false
   # Использовать ключ?
   use_key: false
 
-  # Одноцветный светодиод (обычный)
+  # Одноцветный светодиод
   mono_led: !include
     file: int/output/mono_led.yaml
     vars:
@@ -25,7 +25,7 @@ substitutions:
         number: 2
         ignore_strapping_warning: true
 
-  # Ключ (кнопка)
+  # Ключ
   key: !include
     file: int/binary_sensor/key.yaml
     vars:
@@ -43,8 +43,8 @@ esp32:
     type: esp-idf
 
 packages:
-  # Одноцветный светодиод (обычный)
+  # Одноцветный светодиод
   mono_led: ${ mono_led if use_mono_led else {} }
 
-  # Ключ (кнопка)
+  # Ключ
   key: ${ key if use_key else {} }

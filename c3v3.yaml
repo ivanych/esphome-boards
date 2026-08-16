@@ -1,0 +1,64 @@
+# C3V3 (ESP32-C3 Super Mini Plus)
+# https://www.espboards.dev/esp32/esp32-c3-super-mini-plus/
+#
+#
+# Управляемые объекты:
+#   - Одноцветный светодиод (обычный)   (output.mono_led)   ─┐ конфликтуют,
+#   - Адресная лента (один светодиод)   (light.addr_strip)  ─┘ делят один пин
+#   - Ключ (кнопка)                     (binary_sensor.key)
+# Неуправляемые объекты:
+#   - нет
+# + разные пины
+
+substitutions:
+  friendly_board_name: "C3V3"
+
+  # Использовать одноцветный светодиод?
+  use_mono_led: false
+  # Использовать адресную ленту?
+  use_addr_strip: false
+  # Использовать ключ?
+  use_key: false
+
+  # Одноцветный светодиод
+  mono_led: !include
+    file: int/output/mono_led.yaml
+    vars:
+      pin:
+        number: 8
+        ignore_strapping_warning: true
+
+  # Адресная лента
+  addr_strip: !include
+    file: int/light/addr_strip.yaml
+    vars:
+      pin:
+        number: 8
+        ignore_strapping_warning: true
+
+  # Ключ
+  key: !include
+    file: int/binary_sensor/key.yaml
+    vars:
+      pin:
+        number: 9
+        inverted: true
+        ignore_strapping_warning: true
+        mode:
+          input: true
+          pullup: true
+
+esp32:
+  variant: esp32c3
+  framework:
+    type: esp-idf
+
+packages:
+  # Одноцветный светодиод
+  mono_led: ${ mono_led if use_mono_led else {} }
+
+  # Адресная лента
+  addr_strip: ${ addr_strip if use_addr_strip else {} }
+
+  # Ключ
+  key: ${ key if use_key else {} }
