@@ -13,26 +13,29 @@ substitutions:
   friendly_board_name: "S1V3"
 
   # Использовать одноцветный светодиод?
-  mono_led: false
+  use_mono_led: false
   # Использовать ключ?
-  key: false
+  use_key: false
 
-  # Одноцветный светодиод (обычный)
-  exposed_mono_led: !include
+  # Одноцветный светодиод
+  mono_led: !include
     file: int/output/mono_led.yaml
     vars:
       pin:
         number: 2
         ignore_strapping_warning: true
 
-  # Ключ (кнопка)
-  exposed_key: !include
+  # Ключ
+  key: !include
     file: int/binary_sensor/key.yaml
     vars:
       pin:
         number: 0
         inverted: true
         ignore_strapping_warning: true
+        mode:
+          input: true
+          pullup: true
 
 esp32:
   variant: esp32
@@ -40,8 +43,8 @@ esp32:
     type: esp-idf
 
 packages:
-  # Одноцветный светодиод (обычный)
-  mono_led: ${ exposed_mono_led if mono_led else {} }
+  # Одноцветный светодиод
+  mono_led: ${ mono_led if use_mono_led else {} }
 
-  # Ключ (кнопка)
-  key: ${ exposed_key if key else {} }
+  # Ключ
+  key: ${ key if use_key else {} }
