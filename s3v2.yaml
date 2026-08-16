@@ -16,6 +16,8 @@ substitutions:
 
   # Использовать одноцветный светодиод?
   use_mono_led: false
+  # Использовать адресную ленту?
+  use_addr_strip: false
   # Использовать ключ?
   use_key: false
   # Использовать камеру?
@@ -27,6 +29,13 @@ substitutions:
     vars:
       pin:
         number: 2
+
+  # Адресная лента
+  addr_strip: !include
+    file: int/light/addr_strip.yaml
+    vars:
+      pin:
+        number: 48
 
   # Ключ
   key: !include
@@ -74,6 +83,9 @@ psram:
 packages:
   # Одноцветный светодиод
   mono_led: ${ mono_led if use_mono_led else {} }
+
+  # Адресная лента
+  addr_strip: ${ addr_strip if use_addr_strip else {} }
 
   # Ключ
   key: ${ key if use_key else {} }
