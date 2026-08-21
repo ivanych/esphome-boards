@@ -1,54 +1,69 @@
-# Ivanych Light 1
+# IL1 (ESP32-C3 Ivanych Light 1)
+# На основе отладочной платы ESP32-C3 Super Mini
+# https://www.espboards.dev/esp32/esp32-c3-super-mini/
 #
+# Управляемые объекты:
+#   - Одноцветный светодиод (обычный)   (output.mono_led)
+#   - Ключ (кнопка)                     (binary_sensor.key)
+#   - Пульсометр (фотодиод)             (sensor.pulsometer)
+#   - Счётчик импульсов (фотодиод)      (sensor.pulsometer_N_total)
+# Неуправляемые объекты:
+#   - нет
+# + разные пины
 
 substitutions:
-  board_name: "il1"
-  initial_debounce_delay: "5"
+  friendly_board_name: "IL1"
 
-esphome:
-  platformio_options:
-    board_build.flash_mode: dio
+  # Использовать одноцветный светодиод?
+  use_mono_led: false
+  # Использовать ключ?
+  use_key: false
+  # Использовать пульсометр?
+  use_pulsometer: false
+
+  # Одноцветный светодиод (обычный)
+  mono_led: !include
+    file: int/output/mono_led.yaml
+    vars:
+      pin:
+        number: 8
+        inverted: true
+        ignore_strapping_warning: true
+
+  # Ключ (кнопка)
+  key: !include
+    file: int/binary_sensor/key.yaml
+    vars:
+      pin:
+        number: 9
+        inverted: true
+        ignore_strapping_warning: true
+        mode:
+          input: true
+          pullup: true
+
+  # Пульсометр (фотодиод)
+  pulsometer: !include
+    file: int/sensor/pulsometer.yaml
+    vars:
+      pin:
+        number: 5
+        inverted: true
+        mode:
+          input: true
+          pullup: true
 
 esp32:
-  board: esp32-c3-devkitm-1
+  variant: esp32c3
   framework:
     type: esp-idf
 
-output:
-  - platform: gpio
-    id: output_onboard_led
-    pin:
-      number: 8
-      inverted: true
+packages:
+  # Одноцветный светодиод
+  mono_led: ${ mono_led if use_mono_led else {} }
 
-number:
+  # Ключ
+  key: ${ key if use_key else {} }
 
-  # Время задержки для устранения дребезга модуля фотодиода
-  - platform: template
-    name: "Debounce delay"
-    id: number_debounce_delay
-    icon: mdi:pulse
-    unit_of_measurement: "ms"
-    mode: box
-    min_value: 1
-    max_value: 100
-    step: 1
-    optimistic: true
-    restore_value: true
-
-    # Это значение будет установлено, если не было прочитано сохранённое значение (restore_value)
-    initial_value: ${initial_debounce_delay}
-
-binary_sensor:
-
-  # Фотодиод
-  - platform: gpio
-    name: "Photodiode"
-    id: binary_sensor_switch
-    pin:
-      number: 5
-      inverted: true
-    filters:
-
-      # При возврате значения из лямбды суффикс 'ms' не нужен, только число миллисекунд
-      - delayed_on: !lambda "return id(number_debounce_delay).state;"
+  # Пульсометр
+  pulsometer: ${ pulsometer if use_pulsometer else {} }
